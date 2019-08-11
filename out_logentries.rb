@@ -124,7 +124,9 @@ class Fluent::LogentriesOutput < Fluent::BufferedOutput
 
       # Clean up the string to avoid blank line in logentries
       message = @use_json ? record.to_json : record["message"].rstrip()
-      message.is_a? Hash
+      if a.is_a? Hash and a.has_key? "log"
+        message = message['log']
+      end
       send_logentries(token, message)
     end
   end

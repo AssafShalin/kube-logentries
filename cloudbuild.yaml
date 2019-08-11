@@ -1,0 +1,13 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+          'build', 
+          '-t', 'gcr.io/$PROJECT_ID/fluentd-log-aggragator:$SHORT_SHA', 
+          '-t', 'gcr.io/$PROJECT_ID/fluentd-log-aggragator:latest', 
+          '.'
+          ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/fluentd-log-aggragator:$SHORT_SHA']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/fluentd-log-aggragator:latest']
+images: ['gcr.io/$PROJECT_ID/fluentd-log-aggragator:$SHORT_SHA']
