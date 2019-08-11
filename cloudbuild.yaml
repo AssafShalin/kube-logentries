@@ -10,4 +10,7 @@ steps:
   args: ['push', 'gcr.io/$PROJECT_ID/fluentd-log-aggragator:$SHORT_SHA']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/fluentd-log-aggragator:latest']
+- name: gcr.io/cloud-builders/kubectl
+  args: ['set', 'image', 'daemonset.apps/fluentd', 'fluentd=gcr.io/flawless-span-88315/fluentd-log-aggragator:$SHORT_SHA']
+  env: ['CLOUDSDK_COMPUTE_ZONE=europe-west1-d', 'CLOUDSDK_CONTAINER_CLUSTER=exaspy-cluster']
 images: ['gcr.io/$PROJECT_ID/fluentd-log-aggragator:$SHORT_SHA']
