@@ -3,6 +3,7 @@
 # Usage: https://github.com/Woorank/fluent-plugin-logentries#configruation-file-yml
 require 'socket'
 require 'yaml'
+require 'json'
 require 'openssl'
 require 'fluent/output'
 
@@ -124,10 +125,13 @@ class Fluent::LogentriesOutput < Fluent::BufferedOutput
 
       # Clean up the string to avoid blank line in logentries
       if record.has_key? "log"
-        record = record['log']
+        begin
+            record = JSON.parse(record['log'])
+        rescue JSON::ParserError
+            record = record['log']
+        end
       end
       message = @use_json ? record.to_json : record["message"].rstrip()
-      
       send_logentries(token, message)
     end
   end
